@@ -83,13 +83,11 @@ func (m *Maze) generate(x, y int) {
 }
 
 // changes maze grid cells of solution path to another value
-func (maze *Maze) getCoordPath(nodePath []Node) {
+func (maze *Maze) CreateCoordPath(nodePath []Node) {
 	for _, node := range nodePath {
 		maze.Grid[node.Y][node.X] = 7
 	}
 }
-
-//todo create getSolutionPath function
 
 func (m *Maze) Print() {
 	for _, row := range m.Grid {
