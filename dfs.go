@@ -1,27 +1,5 @@
 package main
 
-import (
-	"errors"
-)
-
-func DepthFirstSearch(graph Graph) []Node {
-	approxGraphSize := graph.End.ID * 2
-	graph.Visited = make([]bool, approxGraphSize)
-	graph.History = make([]Node, 0)
-	graph.Parents = make([]Node, approxGraphSize)
-	for i := range graph.Parents {
-		graph.Parents[i] = Node{ID: NoParent}
-	}
-
-	if len(graph.AdjacencyList[graph.Start.ID]) == 0 {
-		panic(errors.New("starting vertex doesn't have any neighbors"))
-	}
-
-	solveDFS(graph, graph.Start, graph.End)
-
-	return reconstructPath(graph.Parents, graph.Start, graph.End)
-}
-
 func solveDFS(graph Graph, currNode, endNode Node) bool {
 	if graph.Visited[currNode.ID] {
 		return false

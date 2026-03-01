@@ -15,24 +15,6 @@ type Queue struct {
 	Tail  *QNode
 }
 
-const NoParent = -1
-
-func BreadthFirstSearch(graph Graph, startNode, endNode Node) []Node {
-	if len(graph.AdjacencyList[startNode.ID]) == 0 {
-		panic(errors.New("starting vertex doesn't have any neighbors"))
-	}
-	graphSize := graph.End.ID * 2
-	graph.Visited = make([]bool, graphSize)
-	graph.Parents = make([]Node, graphSize)
-	for i := range graphSize {
-		graph.Parents[i] = Node{X: NoParent, Y: NoParent, ID: NoParent}
-	}
-
-	solveBFS(graph, startNode, endNode)
-
-	return reconstructPath(graph.Parents, startNode, endNode)
-}
-
 func solveBFS(graph Graph, startNode, endNode Node) {
 	queue := NewQueue()
 	graph.Visited[startNode.ID] = true
