@@ -11,7 +11,7 @@ type Maze struct {
 	Grid [][]int
 }
 
-// maze generation code is AI generated
+// most of this maze generation function is AI generated, some logic needed to be tweaked
 func NewMaze(size int) *Maze {
 	if size%2 == 0 {
 		size++
@@ -82,38 +82,25 @@ func (m *Maze) generate(x, y int) {
 	}
 }
 
+// changes maze grid cells of solution path to another value
+func (maze *Maze) getCoordPath(nodePath []Node) {
+	for _, node := range nodePath {
+		maze.Grid[node.Y][node.X] = 7
+	}
+}
+
+//todo create getSolutionPath function
+
 func (m *Maze) Print() {
 	for _, row := range m.Grid {
 		for _, cell := range row {
 			switch cell {
-			case 1:
-				fmt.Print("██")
 			case 0:
-				fmt.Print("  ")
-			case 2:
-				fmt.Print("ST")
-			case 3:
-				fmt.Print("EN")
-			}
-		}
-		fmt.Println()
-	}
-}
-
-func PrintADJ(adj [][]int) {
-	for _, row := range adj {
-		for _, cell := range row {
-			switch cell {
+				fmt.Print("   ")
 			case 1:
-				fmt.Print("██")
-			case 0:
-				fmt.Print("  ")
-			case 2:
-				fmt.Print("ST")
-			case 3:
-				fmt.Print("EN")
-			default:
-				fmt.Print("GG")
+				fmt.Print("███")
+			case 7:
+				fmt.Print(" ◯ ")
 			}
 		}
 		fmt.Println()
