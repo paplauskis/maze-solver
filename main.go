@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+//todo add greedy best first search, djikstra, A*
+//todo compare algorithm speeds
 func main() {
 	maze := NewMaze(19)
 	graph := createGraph(maze.Grid)
