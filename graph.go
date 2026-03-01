@@ -1,11 +1,17 @@
 package main
 
+type Node struct {
+	X  int
+	Y  int
+	ID int
+}
+
 type Graph struct {
 	Vertices      int
 	Edges         int
-	AdjacencyList [][]int
-	Start         int
-	End           int
+	AdjacencyList [][]Node
+	Start         Node
+	End           Node
 }
 
 // generates graph from maze grid array
@@ -15,14 +21,15 @@ func createGraph(mazeGrid [][]int) *Graph {
 	widht := len(mazeGrid[0])
 
 	totalNodes := height * widht
-	var vertices, edges, start, end int
-	adjList := make([][]int, totalNodes)
+	var vertices, edges int
+	var start, end Node
+	adjList := make([][]Node, totalNodes)
 
 	directions := [][]int{
-		{0, -1}, //up
-		{1, 0},  //right
 		{0, 1},  //down
+		{1, 0},  //right
 		{-1, 0}, //left
+		{0, -1}, //up
 	}
 
 	for y := 0; y < height; y++ {
@@ -35,17 +42,17 @@ func createGraph(mazeGrid [][]int) *Graph {
 
 			// generates id for node, need them to be unique because
 			// nodes will be pointing to each other
-			nodeID := y*widht + x
+			node := Node{X: x, Y: y, ID: y*widht + x}
 			vertices++
 
 			//starting point (first row because maze has entrance at the top always)
 			if mazeGrid[y][x] != 1 && y == 0 {
-				start = nodeID
+				start = node
 			}
 
 			//end point (last row because ending node is always at the bottom)
 			if mazeGrid[y][x] != 1 && y == height-1 {
-				end = nodeID
+				end = node
 			}
 
 			// checks all possible neighbors
@@ -66,7 +73,7 @@ func createGraph(mazeGrid [][]int) *Graph {
 				neighborID := ny*widht + nx
 				edges++
 				// add node to adjacency list
-				adjList[nodeID] = append(adjList[nodeID], neighborID)
+				adjList[node.ID] = append(adjList[node.ID], Node{X: nx, Y: ny, ID: neighborID})
 			}
 		}
 	}
