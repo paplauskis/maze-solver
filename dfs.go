@@ -15,6 +15,7 @@ func DepthFirstSearch(graph Graph) []Node {
 	return path
 }
 
+// todo edit DFS to return solution path instead of history
 func solveDFS(graph Graph, currNode, endNode Node, visited []bool, history []Node) ([]Node, bool) {
 	if visited[currNode.ID] {
 		return history, false
