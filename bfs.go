@@ -1,6 +1,8 @@
 package main
 
-import "errors"
+import (
+	"errors"
+)
 
 type QNode struct {
 	Node Node
@@ -15,54 +17,46 @@ type Queue struct {
 
 const NoParent = -1
 
-func BreadthFirstSearch(graph Graph, startNode, endNode Node) ([]Node, []Node) {
-
+func BreadthFirstSearch(graph Graph, startNode, endNode Node) []Node {
 	if len(graph.AdjacencyList[startNode.ID]) == 0 {
 		panic(errors.New("starting vertex doesn't have any neighbors"))
 	}
-
-	path, history := solveBFS(graph, startNode, endNode)
-
-	return reconstructPath(path, startNode, endNode), history
-}
-
-func solveBFS(graph Graph, startNode, endNode Node) ([]Node, []Node) {
 	graphSize := graph.End.ID * 2
-	visited := make([]bool, graphSize)
-
-	//stores parents, f.e. if vertex 0 is the starting point and it goes to vertex 3,
-	//vertex 3's parent is 0, if vertex 3 has a child vertex 5 (for example),
-	//then vertex 5's parent is 3 and so on....
-	prnts := make([]Node, graphSize)
-	var history []Node
-
+	graph.Visited = make([]bool, graphSize)
+	graph.Parents = make([]Node, graphSize)
 	for i := range graphSize {
-		prnts[i] = Node{X: NoParent, Y: NoParent, ID: NoParent}
+		graph.Parents[i] = Node{X: NoParent, Y: NoParent, ID: NoParent}
 	}
 
+	solveBFS(graph, startNode, endNode)
+
+	return reconstructPath(graph.Parents, startNode, endNode)
+}
+
+func solveBFS(graph Graph, startNode, endNode Node) {
 	queue := NewQueue()
-	visited[startNode.ID] = true
+	graph.Visited[startNode.ID] = true
 	queue.Enqueue(startNode)
 
 	for {
 		if queue.Size == 0 {
-			return prnts, history
+			return
 		}
 		node, _ := queue.Dequeue()
 		neighbors := graph.AdjacencyList[node.ID]
 
 		for _, x := range neighbors {
-			if visited[x.ID] {
+			if graph.Visited[x.ID] {
 				continue
 			}
 
 			queue.Enqueue(x)
-			visited[x.ID] = true
-			prnts[x.ID] = node
-			history = append(history, x)
+			graph.Visited[x.ID] = true
+			graph.Parents[x.ID] = node
+			graph.History = append(graph.History, x)
 
 			if x == endNode {
-				return prnts, history
+				return
 			}
 		}
 	}
@@ -76,6 +70,20 @@ func solveBFS(graph Graph, startNode, endNode Node) ([]Node, []Node) {
 // if path needs to be found from vertex 0 to vertex 3, then returned array
 // will be [0, 1, 3] as a graph it will look like 0 -> 1 -> 3
 func reconstructPath(prnts []Node, startNode, endNode Node) []Node {
+	//for i, nd := range prnts {
+	//	if nd.ID == -1 {
+	//		fmt.Printf(" %d ", nd.ID)
+	//	} else {
+	//		fmt.Printf("█%d█", nd.ID)
+	//	}
+	//	if i == 0 {
+	//		continue
+	//	}
+	//	if i%9 == 0 {
+	//		fmt.Printf("\n")
+	//	}
+	//}
+	//fmt.Printf("\n")
 	var path []Node
 	for i := endNode; i.ID != NoParent; i = prnts[i.ID] {
 		path = append(path, i)

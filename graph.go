@@ -12,6 +12,12 @@ type Graph struct {
 	AdjacencyList [][]Node
 	Start         Node
 	End           Node
+	Visited       []bool
+	//stores parents, f.e. if vertex 0 is the starting point and it goes to vertex 3,
+	//vertex 3's parent is 0, if vertex 3 has a child vertex 5 (for example),
+	//then vertex 5's parent is 3 and so on....
+	Parents []Node
+	History []Node
 }
 
 // generates graph from maze grid array

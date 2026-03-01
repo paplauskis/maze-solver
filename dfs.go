@@ -6,49 +6,51 @@ import (
 
 func DepthFirstSearch(graph Graph) []Node {
 	approxGraphSize := graph.End.ID * 2
-	visited := make([]bool, approxGraphSize)
-	history := make([]Node, 0)
-	prnts := make([]Node, graph.End.ID*2)
-	for i := range prnts {
-		prnts[i] = Node{ID: NoParent}
+	graph.Visited = make([]bool, approxGraphSize)
+	graph.History = make([]Node, 0)
+	graph.Parents = make([]Node, approxGraphSize)
+	for i := range graph.Parents {
+		graph.Parents[i] = Node{ID: NoParent}
 	}
 
 	if len(graph.AdjacencyList[graph.Start.ID]) == 0 {
 		panic(errors.New("starting vertex doesn't have any neighbors"))
 	}
 
-	path, _ := solveDFS(graph, graph.Start, graph.End, visited, history, prnts)
+	solveDFS(graph, graph.Start, graph.End)
 
-	return reconstructPath(path, graph.Start, graph.End)
+	return reconstructPath(graph.Parents, graph.Start, graph.End)
 }
 
-func solveDFS(graph Graph, currNode, endNode Node, visited []bool, history, prnts []Node) ([]Node, bool) {
-	if visited[currNode.ID] {
-		return prnts, false
+func solveDFS(graph Graph, currNode, endNode Node) bool {
+	if graph.Visited[currNode.ID] {
+		return false
 	}
 
-	history = append(history, currNode)
-	visited[currNode.ID] = true
+	graph.History = append(graph.History, currNode)
+	graph.Visited[currNode.ID] = true
 
 	if currNode == endNode {
-		return prnts, true
+		return true
 	}
 
 	for _, node := range graph.AdjacencyList[currNode.ID] {
 		var endNodeFound bool
 
-		if visited[node.ID] {
+		// skip visited nodes to prevent infinite cycles
+		// for each new node, record its parent
+		if graph.Visited[node.ID] {
 			continue
 		}
-		prnts[node.ID] = currNode
+		graph.Parents[node.ID] = currNode
 
 		// goes to first neighbor always (depth)
 		// in this case - down -> right -> left -> up (based on directions array)
-		history, endNodeFound = solveDFS(graph, node, endNode, visited, history, prnts)
+		endNodeFound = solveDFS(graph, node, endNode)
 		if endNodeFound {
-			return prnts, true
+			return true
 		}
 	}
 
-	return prnts, false
+	return false
 }
