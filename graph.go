@@ -52,6 +52,7 @@ func createGraph(mazeGrid [][]int) *Graph {
 			vertices++
 
 			//starting point (first row because maze has entrance at the top always)
+			//later if resources allow, mazes with entrances with different sizes will be implemented
 			if mazeGrid[y][x] != 1 && y == 0 {
 				start = node
 			}
