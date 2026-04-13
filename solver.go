@@ -12,6 +12,7 @@ func solve(algo string, graph Graph) ([]Node, error) {
 		panic(errors.New("starting vertex doesn't have any neighbors"))
 	}
 
+	// initialize arrays so no index out of bounds errors occur
 	graphSize := graph.End.ID * 2
 	graph.Visited = make([]bool, graphSize)
 	graph.History = make([]Node, 0)
@@ -25,8 +26,10 @@ func solve(algo string, graph Graph) ([]Node, error) {
 		solveDFS(graph, graph.Start, graph.End)
 	case "bfs":
 		solveBFS(graph, graph.Start, graph.End)
+	case "gbfs":
+		solveGBFS(graph, graph.Start, graph.End)
 	default:
-		return []Node{}, errors.New("algorithm not specified")
+		return []Node{}, errors.New("algorithm not valid")
 	}
 
 	return reconstructPath(graph.Parents, graph.Start, graph.End), nil

@@ -1,19 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
-//todo add greedy best first search, djikstra, A*
-//todo compare algorithm speeds
+// todo add dijkstra
+// todo compare algorithm speeds, provide more stats
 func main() {
 	maze := NewMaze(19)
 	graph := createGraph(maze.Grid)
 
 	var userInput string
-	fmt.Println("Available algorithms: 'DFS', 'BFS'")
+	fmt.Println("Available algorithms: 'DFS', 'BFS', 'GBFS'")
 	fmt.Print("Chose maze solving algorithm: ")
 	fmt.Scan(&userInput)
 
-	solutionPath, err := solve("BFS", *graph)
+	solutionPath, err := solve(strings.ToLower(userInput), *graph)
 	if err != nil {
 		panic(err)
 	}
