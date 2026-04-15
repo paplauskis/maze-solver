@@ -1,9 +1,5 @@
 package main
 
-import (
-	"errors"
-)
-
 func solveBFS(graph Graph, startNode, endNode Node) {
 	queue := NewQueue()
 	graph.Visited[startNode.ID] = true
