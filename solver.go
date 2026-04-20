@@ -17,8 +17,12 @@ func solve(algo string, graph Graph) ([]Node, error) {
 	graph.Visited = make([]bool, graphSize)
 	graph.History = make([]Node, 0)
 	graph.Parents = make([]Node, graphSize)
+	graph.Distances = make([]int, graphSize)
 	for i := range graphSize {
 		graph.Parents[i] = Node{X: NoParent, Y: NoParent, ID: NoParent}
+	}
+	for i := range graph.Distances {
+		graph.Distances[i] = 2147483648
 	}
 
 	switch strings.ToLower(algo) {
@@ -28,6 +32,9 @@ func solve(algo string, graph Graph) ([]Node, error) {
 		solveBFS(graph, graph.Start, graph.End)
 	case "gbfs":
 		solveGBFS(graph, graph.Start, graph.End)
+	case "dijkstra":
+		graph.Distances[graph.Start.ID] = 0
+		solveDijkstra(graph, graph.Start, graph.End)
 	default:
 		return []Node{}, errors.New("algorithm not valid")
 	}
