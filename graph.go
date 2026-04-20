@@ -18,6 +18,8 @@ type Graph struct {
 	//then vertex 5's parent is 3 and so on....
 	Parents []Node
 	History []Node
+	//needed for dijkstra
+	Distances []int
 }
 
 // generates graph from maze grid array
