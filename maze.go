@@ -11,7 +11,6 @@ type Maze struct {
 	Grid [][]int
 }
 
-// most of this maze generation function is AI generated, some logic needed to be tweaked
 func NewMaze(size int) *Maze {
 	if size%2 == 0 {
 		size++
